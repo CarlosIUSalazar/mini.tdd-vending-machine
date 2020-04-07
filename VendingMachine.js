@@ -77,7 +77,7 @@ class VendingMachine {
     }
     while (bal >= 500) {
       bal -= 500;
-      fivehundreds++;
+      fiveHundreds++;
     }
     while (bal >= 100) {
       bal -= 100;
