@@ -58,4 +58,14 @@ describe("vending machine", () => {
     expect(machine.selected.selectedRow).to.equal(undefined);
     expect(machine.selected.selectedColumn).to.equal(undefined);
   });
+
+  it("#4 It should start with balance of zero", () => {
+    // Setup
+    const machine = new VendingMachine();
+
+    // Exercise
+
+    // Assert
+    expect(machine.balance).to.be.equal(0);
+  });
 });
