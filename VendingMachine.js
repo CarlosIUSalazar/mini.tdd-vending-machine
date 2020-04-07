@@ -5,7 +5,33 @@
   >>> Don't forget to use module.exports!
   What is that? Well, glad you asked.
   Read about it here: https://www.sitepoint.com/understanding-module-exports-exports-node-js/
+
+The happy path should proceed as follows:
+
+1.  Insert coins
+1.  Select a row
+1.  Select a column
+1.  Dispense the product (log to console)
+1.  Update the inventory
+1.  Dispense change
+
+## Acceptance criteria
+
+1.  _Given_ that the balance is zero, _when_ a coin is inserted, _then_ the balance should rise _and_ types of coins should be stored
+1.  _Given_ that no row is selected, _when_ a row is selected the letter should be saved and printed to the console
+1.  _Given_ that a row is selected, _when_ there is sufficient balance and inventory and a column is selected
+    1.  _then_ the row and column should be logged to the console
+    1.  _and_ a message should be logged stating "Here is your [item name]"
+    1.  _and_ the item inventory should decrease by 1
+    1.  _and_ the correct change should be returned (log type and number of coins to console)
+1.  _Given_ that a row and column are selected, _when_ there is no inventory at that column, _then_ an error message should be logged.
+1.  _Given_ that a row and column are selected, _when_ the balance is insufficient to purchase the selected item, _then_ an error message should be printed
+1.  _Given_ that the program has just started, _when_ the balance is read, _then_ it should read zero
+
+**_Please note: you must track both the types of coins and number of coins to compute the balance and return change_**
+
 */
+
 class VendingMachine {
   constructor() {
     this.balance = 0;
@@ -85,11 +111,31 @@ class VendingMachine {
     console.log(`Here is your ${drink}`);
   }
 
+  notEnoughBalance(drink, difference) {
+    console.log(
+      `Not enough money for ${drink}. Please insert ${difference} more.`
+    );
+  }
+
   purchase() {
     const drink = this.inventory[this.selected.selectedRow][
       this.selected.selectedColumn
     ];
-    if (drink.count > 0 || this.balance > drink.price) {
+    // If enough money but not enough inventory then soldOut()
+    if (drink.count === 0 && this.balance >= drink.price) {
+      this.soldOut(drink.name);
+      this.selected.selectedRow = undefined;
+      this.selected.selectedColumn = undefined;
+    }
+    // If not enough money
+    if (this.balance < drink.price) {
+      let difference = drink.price - this.balance;
+      this.notEnoughBalance(drink.name, difference);
+      this.selected.selectedRow = undefined;
+      this.selected.selectedColumn = undefined;
+    }
+    // If enough money and enough inventory then successful purchase
+    if (drink.count > 0 && this.balance >= drink.price) {
       if (
         this.selected.selectedRow !== undefined &&
         this.selected.selectedColumn !== undefined
@@ -101,8 +147,6 @@ class VendingMachine {
       }
       this.selected.selectedRow = undefined;
       this.selected.selectedColumn = undefined;
-    } else {
-      this.soldOut(drink.name);
     }
   }
 }
