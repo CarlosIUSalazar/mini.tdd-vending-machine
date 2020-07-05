@@ -1,44 +1,31 @@
-# TDD 自動販売機
-### This was created during my time as a [Code Chrysalis](https://codechrysalis.io) Student
+# Practice pairing and test-driven development skills as you create a vending machine.
 
-自動販売機の仕組みを作成することで、ペアプログラミングとテスト駆動開発を練習しましょう。
+Objectives
+In this task you will:
 
-## 達成目標
+Use test-driven development to create a state machine
+Practice writing tests before code
+Practice using the SEAT pattern for tests
+Practice effective pairing techniques
+User story
+As a shopper,
+I would like to have a vending machine
+So that I can buy goods efficiently.
+State
+balance - the amount of money currently inserted but not yet used
+till - a map of coins and counts in the machine
+selectedRow - stores the row selected, if any
+selectedColumn - stores the selected column, if any
+Behavior
+Please note that these are suggestions for methods, you will probably have an easier time adding more than these methods to make testing easier. Remember: Single Responsibility Principle, a method should only do 1 thing.
 
-このタスクでは次のことを行います：
+insertCoin(denomination) - to put a coin in the machine
+changeReturn() - logs the coins to the console and resets the balance
+pressButton('A'-'D') - select a row
+pressButton(1-4) - select a column
+Instructions
+Model the products as a 4x4 array of arrays containing your favorite products, with a name and price, eg:
 
-- テスト駆動開発を使って、ステートマシンを作成する。
-- コードを書く前にテストを書く練習をする。
-- SEAT パターンを使ってテストを書く練習をする。
-- 効果的なペアプログラミングの手法を練習する。
-
-## ユーザストーリー
-
-- 買い物客として、
-- 自動販売機が欲しい。
-- 結果として、商品を効率的に購入できるようになる。
-
-## 状態
-
-- balance - コインを入れてまだ使用していない金額（残高）
-- till - 自動販売機内のコインと数のマップ
-- selectedRow - 選択した行があれば、その行を保存
-- selectedColumn - 選択された列があれば、その列を保存
-
-## 振る舞い
-
-**以下は、実装すべきメソッドの提案にすぎないことを注意してください。おそらく、これらのメソッド以外にも、別のメソッドを追加した方がテストが容易になるでしょう。要確認：単一責任の原則、メソッドに 1 つのことだけを行わせるべきです。**
-
-- `insertCoin(denomination)` - 自動販売機にコインを入れます。
-- `changeReturn()` - コンソールにコインのログを記録し、残高をリセットします。
-- `pressButton('A'-'D')` - 行を選択します。
-- `pressButton(1-4)` - 列を選択します。
-
-## 説明
-
-名前と価格を持ったお気に入りの製品からなる 4x4 の二次元配列として、自動販売機をモデル化します。例：
-
-```JavaScript
 const juice = {name: `Apple Juice`, price: 350, count: 5};
 const coffee = {name: "Tully's", price: 250, count: 7};
 
@@ -48,54 +35,43 @@ const inventory = [
   [..., ..., ..., ...],
   [..., ..., ..., ...],
 ]
-```
+The happy path should proceed as follows:
 
-ハッピーパス（デフォルトのシナリオ）は次のように進行する必要があります：
+Insert coins
+Select a row
+Select a column
+Dispense the product (log to console)
+Update the inventory
+Dispense change
+Acceptance criteria
+Given that the balance is zero, when a coin is inserted, then the balance should rise and types of coins should be stored
+Given that no row is selected, when a row is selected the letter should be saved and printed to the console
+Given that a row is selected, when there is sufficient balance and inventory and a column is selected
+then the row and column should be logged to the console
+and a message should be logged stating "Here is your [item name]"
+and the item inventory should decrease by 1
+and the correct change should be returned (log type and number of coins to console)
+Given that a row and column are selected, when there is no inventory at that column, then an error message should be logged.
+Given that a row and column are selected, when the balance is insufficient to purchase the selected item, then an error message should be printed
+Given that the program has just started, when the balance is read, then it should read zero
+Please note: you must track both the types of coins and number of coins to compute the balance and return change
 
-1. コインを挿入
-2. 行を選択
-3. 列を選択
-4. 製品を出す（コンソールにログを記録する）
-5. 在庫の更新
-6. お釣りを出す
+Unhappy paths
+At minimum, you must implement tests for all the acceptance criteria, however should not limit yourself to only these tests. Write as many tests as needed.
 
-## 必要要件
+As a good TDD developer, when you find an edge case outside the specs, you should ask your PM (instructor) what the desired functionality should be.
 
-1. 残高がゼロの _場合_、コインが挿入された _時に_、_その後_ 残高が加算され、_かつ_ コインの種類を保存する必要があります。
-2. 行が選択されていない _場合_、行が選択された _時に_、行の文字を保存して、コンソールにログを表示する必要があります。
-3. ある行を選択した _場合_、十分な残高と在庫がある _時に_、列が選択されます。
-   1. _その後_ 行と列をコンソールにログを出力する必要があります。
-   2. "Here is your [item name]" というメッセージをログ出力する必要があります。
-   3. _そして_、アイテム（商品）の在庫を 1 つ減らす必要があります。
-   4. _また_、正しいお釣りを返します（お釣りのコインの種類と数を、コンソールにログ出力）
-4. 行と列が選択されている _場合_、対象の列に在庫がない _時に_、エラーメッセージをログに出力する必要があります。
-5. 行と列が選択されている _場合_、選択されたアイテム（商品）を購入するための残高が不足している _時に_、_その後_ エラーメッセージをログ出力する必要があります。
-6. プログラムを起動した _場合_、残高が読み込まれた _時に_、_その後_ 残高を 0 とする必要があります。
+Pairing
+Take this opportunity to practice ping-pong pairing:
 
-**_注意してください：残高を計算してお釣りを返すには、コインの種類と数の両方を記憶しなければいけません_**
+The pair on the left writes a failing test
+The pair on the right writes the minimum code to make it pass
+Righty then writes the next test
+Lefty gets the test to pass
+Don't forget to refactor, and only do so when green!
 
-## アンハッピーパス（上記以外の留意点）
+Hint: do not try to test what is being logged to console, instead think about how to structure your methods and have them return objects for things such as returned change or dispensed item, this then allows you to test the return value
 
-少なくとも、すべての必要要件に対してテストを実装しなければいけませんが、これらのテストのみに限定すべきではありません。必要なだけテストを記述しましょう。
-
-優れた TDD 開発者として、仕様外のエッジケースを見つけた場合は、PM（インストラクター）に期待される機能を尋ねる必要があります。
-
-## ペアプログラミング
-
-この機会に、*ピンポンペアプログラミング*を練習しましょう：
-
-1. 左側のペアは、失敗するケースのテストを書きます。
-1. 右側のペアは、テストをパスするための最小限のコードを書きます。
-1. 右側のペアは、次のテストを書きます。
-1. 左側のペアは、テストをパスするコードを書きます。
-
-リファクタリングすることを忘れないでください。そしてグリーンになった時（テストをパスした時）だけ、リファクタリングを行ってください！
-
-**_ヒント：コンソールにログ出力されたものをテストしようとせず、代わりにメソッドをどのように組み立てて、お釣りや出したアイテム（商品）などのオブジェクトを、戻り値として返すか、その方法を考えましょう。これにより、戻り値に対して、テストを作成できるようになります。_**
-
-## セットアップ
-
-```bash
+Setup
 yarn
 yarn test
-```
